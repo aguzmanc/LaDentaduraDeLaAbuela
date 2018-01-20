@@ -10,6 +10,7 @@ public class WeaponController : MonoBehaviour {
 	public int MaxAmmo = 2;
 	public int BulletsPerShot = 10;
 	public float AccuracyError = 5;
+	public WeaponCooldownUI CooldownUI;
 
 	int _ammoCount;
 	bool _isReloading;
@@ -40,12 +41,16 @@ public class WeaponController : MonoBehaviour {
 				newBullet.transform.Rotate (Random.value * AccuracyError, Random.value * AccuracyError, 0);
 			}
 			_ammoCount--;
+			if (_ammoCount <= 0) {
+				StartCoroutine (Reload());
+			}
 		}
 	}
 
 	IEnumerator Reload () {
 		if (!_isReloading) {
 			_isReloading = true;
+			CooldownUI.DisplayCooldown (ReloadTime);
 			yield return new WaitForSeconds (ReloadTime);
 			_ammoCount = MaxAmmo;
 			_isReloading = false;
