@@ -8,6 +8,8 @@ public class WeaponController : MonoBehaviour {
 	public Transform SpawnPoint;
 	public float ReloadTime = 1;
 	public int MaxAmmo = 2;
+	public int BulletsPerShot = 10;
+	public float AccuracyError = 5;
 
 	int _ammoCount;
 	bool _isReloading;
@@ -33,7 +35,10 @@ public class WeaponController : MonoBehaviour {
 
 	void Fire() {
 		if (_ammoCount > 0 && !_isReloading) {
-			Instantiate (Ammo, transform);
+			for (int i = 0; i < BulletsPerShot; i++) {
+				GameObject newBullet = Instantiate (Ammo, SpawnPoint);
+				newBullet.transform.Rotate (Random.value * AccuracyError, Random.value * AccuracyError, 0);
+			}
 			_ammoCount--;
 		}
 	}
