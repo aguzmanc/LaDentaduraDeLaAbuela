@@ -6,11 +6,12 @@ public class WeaponController : MonoBehaviour {
 	public float RotationSpeed = 2;
 	public GameObject Ammo;
 	public Transform SpawnPoint;
-	public float ReloadTime = 1;
+	public float ReloadTimePerBullet = 1;
 	public int MaxAmmo = 2;
 	public int BulletsPerShot = 10;
 	public float AccuracyError = 5;
-	public WeaponCooldownUI CooldownUI;
+	//public WeaponCooldownUI CooldownUI;
+	public WeaponUI WeaponUI;
 
 	int _ammoCount;
 	bool _isReloading;
@@ -19,6 +20,9 @@ public class WeaponController : MonoBehaviour {
 	void Start () {
 		_ammoCount = MaxAmmo;
 		_isReloading = false;
+		for (int i = 0; i < MaxAmmo; i++) {
+			WeaponUI.AddBullet ();
+		}
 	}
 	
 	// Update is called once per frame
@@ -40,6 +44,7 @@ public class WeaponController : MonoBehaviour {
 				GameObject newBullet = Instantiate (Ammo, SpawnPoint);
 				newBullet.transform.Rotate (Random.value * AccuracyError, Random.value * AccuracyError, 0);
 			}
+			WeaponUI.RemoveBullet ();
 			_ammoCount--;
 			if (_ammoCount <= 0) {
 				StartCoroutine (Reload());
@@ -50,9 +55,12 @@ public class WeaponController : MonoBehaviour {
 	IEnumerator Reload () {
 		if (!_isReloading) {
 			_isReloading = true;
-			CooldownUI.DisplayCooldown (ReloadTime);
-			yield return new WaitForSeconds (ReloadTime);
-			_ammoCount = MaxAmmo;
+			//CooldownUI.DisplayCooldown (ReloadTime);
+			while (_ammoCount < MaxAmmo) {
+				yield return new WaitForSeconds (ReloadTimePerBullet);
+				WeaponUI.AddBullet ();
+				_ammoCount++;
+			}
 			_isReloading = false;
 		}
 	}
