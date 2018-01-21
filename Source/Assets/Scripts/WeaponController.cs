@@ -4,18 +4,28 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour {
 	public float RotationSpeed = 2;
-	public GameObject Ammo;
+	public GameObject Bullet;
 	public Transform SpawnPoint;
-	public float ReloadTime = 1;
+	public float ReloadTimePerBullet = 1;
 	public int MaxAmmo = 2;
+	public int BulletsPerShot = 10;
+	public float AccuracyError = 5;
+	//public WeaponCooldownUI CooldownUI;
+	public WeaponUI WeaponUI;
 
 	int _ammoCount;
 	bool _isReloading;
+	ParticleSystem _particleSystem;
 
 	// Use this for initialization
 	void Start () {
+		_particleSystem = GetComponentInChildren<ParticleSystem> ();
+
 		_ammoCount = MaxAmmo;
 		_isReloading = false;
+		for (int i = 0; i < MaxAmmo; i++) {
+			WeaponUI.AddBullet ();
+		}
 	}
 	
 	// Update is called once per frame
@@ -33,16 +43,28 @@ public class WeaponController : MonoBehaviour {
 
 	void Fire() {
 		if (_ammoCount > 0 && !_isReloading) {
-			Instantiate (Ammo, transform);
+			for (int i = 0; i < BulletsPerShot; i++) {
+				GameObject newBullet = Instantiate (Bullet, SpawnPoint);
+				newBullet.transform.Rotate (Random.value * AccuracyError, Random.value * AccuracyError, 0);
+				_particleSystem.Play ();
+			}
+			WeaponUI.RemoveBullet ();
 			_ammoCount--;
+			if (_ammoCount <= 0) {
+				StartCoroutine (Reload());
+			}
 		}
 	}
 
 	IEnumerator Reload () {
 		if (!_isReloading) {
 			_isReloading = true;
-			yield return new WaitForSeconds (ReloadTime);
-			_ammoCount = MaxAmmo;
+			//CooldownUI.DisplayCooldown (ReloadTime);
+			while (_ammoCount < MaxAmmo) {
+				yield return new WaitForSeconds (ReloadTimePerBullet);
+				WeaponUI.AddBullet ();
+				_ammoCount++;
+			}
 			_isReloading = false;
 		}
 	}
