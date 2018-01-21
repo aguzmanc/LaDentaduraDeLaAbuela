@@ -550,7 +550,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RotationSpeed: 2
-  Ammo: {fileID: 1748817799726274, guid: f06c994de0583449997817e5c6e4607c, type: 2}
+  Bullet: {fileID: 1128658106677396, guid: 08ac18d9b69914003831d39b99a985b9, type: 2}
   SpawnPoint: {fileID: 165839294}
   ReloadTimePerBullet: 1
   MaxAmmo: 2

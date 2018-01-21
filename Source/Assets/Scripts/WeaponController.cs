@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour {
 	public float RotationSpeed = 2;
-	public GameObject Ammo;
+	public GameObject Bullet;
 	public Transform SpawnPoint;
 	public float ReloadTimePerBullet = 1;
 	public int MaxAmmo = 2;
@@ -41,7 +41,7 @@ public class WeaponController : MonoBehaviour {
 	void Fire() {
 		if (_ammoCount > 0 && !_isReloading) {
 			for (int i = 0; i < BulletsPerShot; i++) {
-				GameObject newBullet = Instantiate (Ammo, SpawnPoint);
+				GameObject newBullet = Instantiate (Bullet, SpawnPoint);
 				newBullet.transform.Rotate (Random.value * AccuracyError, Random.value * AccuracyError, 0);
 			}
 			WeaponUI.RemoveBullet ();
