@@ -3,39 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Tremble : MonoBehaviour {
-	public float Delay = 0.1f;
-	public float PositionIntensity = 0.1f;
-	public float RotationIntensity = 1;
+	[Range(0, 3)]
+	public float Velocity = 1;
+	[Range(0, 5)]
+	public float Range = 5;
 
 	Vector3 _originPosition;
 	Vector3 _originRotation;
 
-	// Use this for initialization
+	float _x = 0;
+	float _noise = 0;
+
 	void Start () {
 		_originPosition = transform.position;
 		_originRotation = transform.eulerAngles;
-		StartCoroutine (TremblePositionAndRotation ());
 	}
 	
-	// Update is called once per frame
 	void Update () {
-	}
-
-	IEnumerator TremblePositionAndRotation() {
-		while (true) {
-			//_originPosition = transform.position;
-			//_originRotation = transform.eulerAngles;
-			yield return new WaitForSeconds(Delay);
-			transform.position = RandomPosition (transform.position);
-			transform.eulerAngles = RandomRotation (transform.eulerAngles);
-		}
-	}
-
-	Vector3 RandomPosition(Vector3 position) {
-		return position + Random.insideUnitSphere * PositionIntensity;
-	}
-
-	Vector3 RandomRotation(Vector3 rotation) {
-		return rotation + Random.insideUnitSphere * RotationIntensity;
+		_x = _x > 999999 ? 0 : _x + Velocity;
+		float newNoise = Mathf.PerlinNoise (_x, 0) * Range * 2 - Range;
+		transform.Rotate (-_noise + newNoise, -_noise + newNoise, 0);
+		_noise = newNoise;
 	}
 }
