@@ -10,19 +10,19 @@ public class BleachController : MonoBehaviour {
 	[Range(0.1f, 1)]
 	public float reloadSpeed = 0.5f;
 	public RectTransform slider;
-	float _hopCooldown = 100;
+	float _bleachCooldown = 100;
 
 	void Update () {
-		if (_hopCooldown < 100) {
-			_hopCooldown += reloadSpeed;
-			float _sliderValue = _hopCooldown * 1.5f;
+		if (_bleachCooldown < 100) {
+			_bleachCooldown += reloadSpeed;
+			float _sliderValue = _bleachCooldown * 1.5f;
 			if (_sliderValue > 150)
 				_sliderValue = 150;
 			slider.GetComponent<RectTransform> ().SetSizeWithCurrentAnchors (RectTransform.Axis.Horizontal, _sliderValue);
-		} else if (_hopCooldown >= 100) {
+		} else if (_bleachCooldown >= 100) {
 			if (Input.GetKeyUp ("x")) {
 				Instantiate(Bleach, transform.position + (transform.forward*DropDistance) - (transform.up*0.5f), transform.rotation);
-				_hopCooldown = 0;
+				_bleachCooldown = 0;
 			}
 		}
 	}
