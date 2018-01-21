@@ -53,3 +53,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxDistance: 10
   Duration: 0.2
+  Particles: {fileID: 1104781630115854, guid: 89722f5f25f0f418ca2567cdf2682044, type: 2}

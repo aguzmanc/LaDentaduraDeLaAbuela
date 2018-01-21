@@ -15,9 +15,12 @@ public class WeaponController : MonoBehaviour {
 
 	int _ammoCount;
 	bool _isReloading;
+	ParticleSystem _particleSystem;
 
 	// Use this for initialization
 	void Start () {
+		_particleSystem = GetComponentInChildren<ParticleSystem> ();
+
 		_ammoCount = MaxAmmo;
 		_isReloading = false;
 		for (int i = 0; i < MaxAmmo; i++) {
@@ -43,6 +46,7 @@ public class WeaponController : MonoBehaviour {
 			for (int i = 0; i < BulletsPerShot; i++) {
 				GameObject newBullet = Instantiate (Bullet, SpawnPoint);
 				newBullet.transform.Rotate (Random.value * AccuracyError, Random.value * AccuracyError, 0);
+				_particleSystem.Play ();
 			}
 			WeaponUI.RemoveBullet ();
 			_ammoCount--;
